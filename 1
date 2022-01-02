@@ -1,0 +1,44 @@
+# Lotkas-Voltera vienādojums
+<img src="https://www.geeksforgeeks.org/wp-content/ql-cache/quicklatex.com-266fa6a8dfb690331b0e5b11eae21e6c_l3.png" width=300, height=150/>
+
+import matplotlib.pyplot as plt #izmantoju mathplotlib datubāzi, lai konstruēt grafiku 
+import numpy as np
+ 
+def rk4(r, t, h):  # rediģēts; nav nepieciešama f ievade 
+    #Runges-Kutta metode diferenciālvienādojuma atrisināšanai
+    k1=h*f(r, t)
+    k2=h*f(r+0.5*k1, t+0.5*h)
+    k3=h*f(r+0.5*k2, t+0.5*h)
+    k4=h*f(r+k3, t + h)
+    return k1+2*k2+2*k3+k4
+ 
+ 
+def f(r, t):
+    x, y = r[0], r[1]
+    fxd=x*(alpha-beta*y)
+    fyd=-y*(gamma-sigma*x)
+    return np.array([fxd, fyd], float)
+ 
+#lai atrastu attiecības starp jebkuru plēsoņu un upuru sugu, ievadiet parametrus manuāli
+#tiek izmantota komanda float, jo daudzos piemēros,kas pieejami internetā bija izmantoti mazi decimālskaitļi
+alpha=float(input("Ievadiet alfa:"))
+beta=float(input("Ievadiet bēta:"))
+gamma=float(input("Ievadiet gamma:"))
+sigma=float(input("Ievadiet sigma:"))
+ 
+ 
+h=0.001  #pastāv iespēja izvēlēties citu parametru h
+tpoints=np.arange(0, 50, h)  # grafika asu sadalījums
+xpoints, ypoints = [], []
+r=np.array([5, 5], float)
+for t in tpoints:
+    xpoints.append(r[0])  
+    ypoints.append(r[1])  
+    r += rk4(r, t, h)  
+plt.plot(tpoints, xpoints)
+plt.plot(tpoints, ypoints)
+plt.xlabel("Laiks gados")
+plt.ylabel("Populācija")
+plt.title("Lotkas-Voltera vienādojums")
+plt.savefig("Lotkas_Voltera_modelis.png") #saglabāt iegūto grafiku kā atsevišķu .png failu
+plt.show()
